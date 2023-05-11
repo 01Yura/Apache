@@ -8,10 +8,10 @@ apt install apache2
 
 Далее нужно создать новый файл конфигурации, он должен лежать там же где и дефолтный /etc/apache2/sites-available/000-default.conf
 Допутим такой /etc/apache2/sites-available/site1.conf
-ServerName petrovich.ddnsking.com - днс имя
 
-        ServerAdmin webmaster@localhost - без изменений
-        DocumentRoot /var/www/html/site1 - путь до сайта
+    ServerName petrovich.ddnsking.com - днс имя
+    ServerAdmin webmaster@localhost - без изменений
+    DocumentRoot /var/www/html/site1 - путь до сайта
 
 a2ensite site1.conf - включаем виртуальный хост
 systemctl reload apache2 - перегружаем Apache
