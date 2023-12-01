@@ -20,6 +20,9 @@ apt install apache2
 
 
 a2ensite site1.conf - включаем виртуальный хост
+
+apache2ctl configtest - тестим конфиг
+
 systemctl reload apache2 - перегружаем Apache
 
 Так можно поместить много сайтов на один IP под разными DNS именами
@@ -87,3 +90,24 @@ whois 34.76.153.113 - инфа о ip адресе
 
 5.  nginx -t - проверка не накосячили ли
 6.  systemctl reload nginx - перегружаем Nginx
+
+
+        Установка сертификата от LetsEncrypt
+
+Нам нужны два пакета: certbot и python3-certbot-apache. Последний — плагин, который интегрирует Certbot с Apache, позволяя автоматизировать получение сертификата и настройку HTTPS на веб-сервере с помощью одной команды.
+
+    sudo apt install certbot python3-certbot-apache
+
+sudo ufw status
+sudo ufw allow 'Apache Full' - открываем порт 443
+sudo ufw delete allow 'Apache' - закрываем порт 80
+
+sudo certbot --apache
+или 
+sudo certbot certonly --standalone --agree-tos --preferred-challenges http -d it-primyshev.site -d www.it-primyshev.site
+
+Удалить сертификат
+
+sudo certbot delete
+sudo certbot delete --cert-name example.com
+
