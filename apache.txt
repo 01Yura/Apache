@@ -9,7 +9,7 @@ apt install apache2
 Далее нужно создать новый файл конфигурации, он должен лежать там же где и дефолтный /etc/apache2/sites-available/000-default.conf
 Допутим такой /etc/apache2/sites-available/site1.conf
 
-    <VirtualHost *:80>
+<VirtualHost *:80>
     ServerAdmin webmaster@localhost - без изменений
     ServerName it-primyshev.site - днс имя
     ServerAlias www.your_domain 
