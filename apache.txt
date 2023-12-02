@@ -111,6 +111,8 @@ sudo certbot certonly --standalone --agree-tos --preferred-challenges http -d it
 sudo certbot delete
 sudo certbot delete --cert-name example.com
 
+certbot ceronly --webroot - утановить без апачи плагина и настраивать вручную
+
                 PHP
 
 sudo apt-get update
