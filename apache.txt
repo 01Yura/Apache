@@ -196,3 +196,41 @@ sudo apt -y install php7.4
 sudo apt-get install -y php7.4-cli php7.4-json php7.4-common php7.4-mysql php7.4-zip php7.4-gd php7.4-mbstring php7.4-curl php7.4-xml php7.4-bcmath libapache2-mod-php7.4
 
 
+                                 FTP
+
+sudo apt install vsftpd
+systemctl status vsftpd
+sudo nano /etc/vsftpd.conf
+
+    listen=YES # разрешить работу по IPv4
+    listen_ipv6=NO # запретить работу по IPv6
+    anonymous_enable=NO # запретить подключаться анонимным пользователям (можно тольео тем, кто есть в системе)
+    local_enable=YES # разрешить доступ локальным пользователям
+    write_enable=YES # Разрешите пользователям работать с файлами
+    local_umask=022 # Назначьте права новым файлам
+    dirmessage_enable=YES # Включите сообщение для пользователя при входе
+    use_localtime=YES # Разрешите использовать локальное время на сервере
+    xferlog_enable=YES # Настройте логирование операций
+    connect_from_port_20=YES # Настройте передачу данных по 20 порту
+    xferlog_std_format=YES # Задайте формат логов
+    xferlog_file=/var/log/vsftpd.log # Укажите директорию для хранения логов
+    chroot_local_user=YES #  Дайте доступ пользователям только к своим домашним каталогам
+    allow_writeable_chroot=YES # см выше
+    secure_chroot_dir=/var/run/vsftpd/empty # 
+    pam_service_name=vsftpd # Включите поддержку авторизации PAM
+    allow_writeable_chroot=YES # см  man 5 vsftpd.conf
+    userlist_enable=YES # Разрешите вход только пользователям из файла userlist
+    userlist_file=/etc/vsftpd.userlist # см выше
+    userlist_deny=NO # см выше
+
+Защита передачи данных при помощи SSL/TLS
+Для защиты передачи ваших данных между FTP-клиентом и FTP-сервером в данной инструкции мы будем использовать генерацию самозаверяющего SSL-сертификата. Закрытый ключ и сертификат будут сохранены в одном файле, для чего следует применить команду:
+    sudo openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem
+
+После установки SSL-сертификата необходимо внести изменения в конфигурационный файл:
+    sudo nano /etc/vsftpd.conf
+
+А именно, внесите изменения в следующие строки данного файла:
+    rsa_cert_file=/etc/ssl/private/vsftpd.pem
+    rsa_private_key_file=/etc/ssl/private/vsftpd.pem
+    ssl_enable=YES
