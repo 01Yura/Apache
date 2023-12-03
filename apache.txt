@@ -112,6 +112,7 @@ sudo certbot delete
 sudo certbot delete --cert-name example.com
 
             Установка без апачи плагина
+Вот хорошая инструкция            
     https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-18-04-ru
 
     certbot ceronly --webroot - утановить без апачи плагина и настраивать вручную
