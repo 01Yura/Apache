@@ -218,6 +218,12 @@ ln -s /etc/httpd/sites-availablemy_web_site.conf /etc/httpd/sites-enabled/my_web
 Перегрузить httpd
 systemctl restart httpd
 
+Разрешите HTTP и HTTPS-трафик на брандмауэре:
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --permanent --add-service=https
+sudo firewall-cmd --reload
+
+sudo systemctl enable httpd - автозагрузка 
                 PHP
 
 sudo apt-get update
