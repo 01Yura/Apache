@@ -185,6 +185,39 @@ SSLSessionTickets Off
 sudo systemctl restart apache2
 
 
+
+                            APACHE (HTTPD) на REDHAT и CENTOS
+
+Создать файл в папке /var/www/html/My_web_site-main/index.html - ваш сайт
+
+В файл /etc/httpd/conf/httpd.conf в конце внести строчку:
+    ...
+    # Supplemental configuration
+    #
+    # Load config files in the "/etc/httpd/conf.d" directory, if any.
+    IncludeOptional conf.d/*.conf
+    IncludeOptional sites-enabled/*.conf
+
+Создать папки 
+mkdir /etc/httpd/sites-available /etc/httpd/sites-enabled
+И создать там конфиг своего сайта 
+nano /etc/httpd/sites-available/my_web_site.conf содержащий:
+
+<VirtualHost *:80>
+    ServerName it-primyshev.site
+    ServerAlias www.it-primyshev.site
+    DocumentRoot /var/www/html/My_web_site-main
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+Включить сайт
+ln -s /etc/httpd/sites-availablemy_web_site.conf /etc/httpd/sites-enabled/my_web_site.conf
+
+Перегрузить httpd
+systemctl restart httpd
+
                 PHP
 
 sudo apt-get update
