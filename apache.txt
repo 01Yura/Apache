@@ -213,7 +213,7 @@ nano /etc/httpd/sites-available/my_web_site.conf содержащий:
 </VirtualHost>
 
 Включить сайт
-ln -s /etc/httpd/sites-availablemy_web_site.conf /etc/httpd/sites-enabled/my_web_site.conf
+ln -s /etc/httpd/sites-available/my_web_site.conf /etc/httpd/sites-enabled/my_web_site.conf
 
 Перегрузить httpd
 systemctl restart httpd
