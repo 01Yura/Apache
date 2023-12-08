@@ -208,8 +208,8 @@ nano /etc/httpd/sites-available/my_web_site.conf содержащий:
     ServerAlias www.it-primyshev.site
     DocumentRoot /var/www/html/My_web_site-main
 
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog /var/log/error.log
+    CustomLog /var/log/access.log combined
 </VirtualHost>
 
 Включить сайт
@@ -296,3 +296,5 @@ open имя_хоста
     bye – завершение работы.
     close – выход из текущего сеанса и возврат в контекст командной строки FTP.
     status – отображение статуса FTP клиента.
+
+ftp> !ping 127.0.0.1 - чтобы выполнить команду на локальной машине во время сеанса, нужно перед командой поставить восклицательный знак
