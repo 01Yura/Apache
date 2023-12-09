@@ -298,3 +298,98 @@ open имя_хоста
     status – отображение статуса FTP клиента.
 
 ftp> !ping 127.0.0.1 - чтобы выполнить команду на локальной машине во время сеанса, нужно перед командой поставить восклицательный знак
+
+
+
+                        NGINX на ubuntu
+
+sudo apt install nginx
+Автоматом запускается и добавляется в автозагрузку
+
+sudo apt install ufw - установить фаерволл
+sudo nano /etc/ufw/applications.d/nginx.ini - создаем файл
+   
+    [Nginx HTTP]
+    title=Web Server
+    description=Enable NGINX HTTP traffic
+    ports=80/tcp
+
+    [Nginx HTTPS] \
+    title=Web Server (HTTPS) \
+    description=Enable NGINX HTTPS traffic
+    ports=443/tcp
+
+    [Nginx Full]
+    title=Web Server (HTTP,HTTPS)
+    description=Enable NGINX HTTP and HTTPS traffic
+    ports=80,443/tcp
+
+sudo ufw app list - проверяем список доступных приложений
+sudo ufw enable - включаем 
+sudo ufw allow 'Nginx Full' - разрешаем
+sudo ufw allow 'OpenSSH'
+
+sudo nano /etc/nginx/nginx.conf - основной файл конфигурации
+
+sudo nano /etc/nginx/sites-available/testsite.conf - создаем конфиг
+
+    server {
+        listen 80;
+        listen [::]:80;
+
+        server_name testsite.dev www.testsite.dev;
+        root /var/www/html/testsite; #папка в которой лежат фаылй сайта
+        index index.html index.xml;
+    }
+
+ sudo ln -s /etc/nginx/sites-available/testsiteconf /etc/nginx/sites-enabled/ - делаем симлинк в папку sites-enabled
+
+ sudo nginx -t - проверяем конфиг
+ sudo systemctl restart nginx
+
+    
+
+                          NGINX на REDHAT
+
+nano /etc/yum.repos.d/nginx.repo - создаем файл под новый репозиторий
+Вносим данные в него с сайта http://nginx.org/en/linux_packages.html
+
+Или добавляем репу от fedora:
+    sudo yum install epel-release
+
+yum update
+yum install nginx
+По умолчанию выключен и не в автозагрузке
+
+sudo firewall-cmd --permanent --add-service=http 
+sudo firewall-cmd --permanent --add-service=https
+sudo firewall-cmd --reload
+
+sudo systemctl enable nginx
+sudo systemctl start nginx
+
+
+    /etc/nginx — в данной директории хранятся все конфигурационные файлы, в том числе и главный конфигурационный файл nginx.conf.
+    /etc/nginx/conf.d/ — отвечает за хранение файлов конфигурации сайтов, размещенных на веб-сервере.
+    /var/log/nginx — эта директория служит журналом веб-сервера, в котором хранятся файлы с логами. Например, access.log и error.log. Первый отвечает за хранение всех запросов к веб-серверу, а второй регистрирует все ошибки на нем.
+
+sudo mkdir -p /var/www/centossite.dev/html - создаем директорию для сайта
+nano /etc/nginx/conf.d/centossite.conf - сщздаем файл конфига сайта с содержимым:
+
+server {
+
+    listen 80;
+    listen [::]:80;
+
+    server_name centossite.dev www.centossite.dev; # если нет домена, то ip
+    root /var/www/centossite.dev/html;
+    index index.html index.xml;
+    location / {
+            try_files $uri $uri/ =404;
+    }
+}    
+
+sudo nginx -t
+systemctl restart nginx
+
+
