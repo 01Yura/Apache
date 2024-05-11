@@ -12,8 +12,8 @@ apt install apache2
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost - без изменений
     ServerName it-primyshev.site - днс имя
-    ServerAlias www.your_domain 
-    DocumentRoot /var/www/site1 -  - путь до сайта
+    ServerAlias www.it-primyshev.site 
+    DocumentRoot /var/www/html/site1 -  - путь до сайта
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
@@ -153,7 +153,7 @@ SSLSessionTickets Off
                 SSLEngine on
 
                 SSLCertificateFile      /etc/letsencrypt/live/it-primyshev.site/fullchain.pem
-                SSLCertificateKeyFile /etc/letsencrypt/live/it-primyshev.site/privkey.pem
+                SSLCertificateKeyFile   /etc/letsencrypt/live/it-primyshev.site/privkey.pem
 
                 <FilesMatch "\.(cgi|shtml|phtml|php)$">
                                 SSLOptions +StdEnvVars
@@ -226,7 +226,9 @@ sudo firewall-cmd --permanent --add-service=https
 sudo firewall-cmd --reload
 
 sudo systemctl enable httpd - автозагрузка 
-                PHP
+                
+                
+                                                PHP
 
 sudo apt-get update
 sudo apt -y install software-properties-common
@@ -237,7 +239,7 @@ sudo apt -y install php7.4
 sudo apt-get install -y php7.4-cli php7.4-json php7.4-common php7.4-mysql php7.4-zip php7.4-gd php7.4-mbstring php7.4-curl php7.4-xml php7.4-bcmath libapache2-mod-php7.4
 
 
-                                 FTP
+                                                 FTP
 
 sudo apt install vsftpd
 systemctl status vsftpd
