@@ -228,7 +228,7 @@ sudo firewall-cmd --reload
 sudo systemctl enable httpd - автозагрузка 
                 
                 
-                                                PHP
+                                                PHP для Apache
 
 sudo apt-get update
 sudo apt -y install software-properties-common
@@ -374,7 +374,7 @@ sudo systemctl start nginx
 
 
     /etc/nginx — в данной директории хранятся все конфигурационные файлы, в том числе и главный конфигурационный файл nginx.conf.
-    /etc/nginx/conf.d/ — отвечает за хранение файлов конфигурации сайтов, размещенных на веб-сервере.
+    /etc/nginx/conf.d/ — отвечает за хранение файлов конфигурации сайтов, размещенных на веб-сервере (после установки папка пустая)
     /var/log/nginx — эта директория служит журналом веб-сервера, в котором хранятся файлы с логами. Например, access.log и error.log. Первый отвечает за хранение всех запросов к веб-серверу, а второй регистрирует все ошибки на нем.
 
 sudo mkdir -p /var/www/centossite.dev/html - создаем директорию для сайта
@@ -386,7 +386,7 @@ server {
     listen [::]:80;
 
     server_name centossite.dev www.centossite.dev; # если нет домена, то ip
-    root /var/www/centossite.dev/html;
+    root /var/www/centossite.dev/html; # путь к директории сайта
     index index.html index.xml;
     location / {
             try_files $uri $uri/ =404;
@@ -398,5 +398,54 @@ systemctl restart nginx
 
 Можно сайт положить в стандартную папку /usr/share/nginx/html/своя_папка в которой лежит файл по умолчанию, но тогда надо указать ее в файле конфига своего сайта
 
+                                PHP для Nginx
 
+Установка расширения php-fpm вместе с другими расширениями php.
+sudo apt install software-properties-common ca-certificates lsb-release apt-transport-https -y
+LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
+sudo apt update
+
+После установки зависимостей мы готовы к установке PHP-FPM.
+sudo apt install php8.1 php8.1-fpm php8.1-mysql php8.1-mbstring php8.1-xml php8.1-curl
+
+После установки запустите и включите php8.1-fpm.service
+sudo systemctl start php8.1-fpm.service && sudo systemctl enable php8.1-fpm.service
+
+Чтобы проверить, все ли в порядке, выполните следующую команду
+sudo systemctl status php8.1-fpm.service
+
+
+Шаг 4. Настройка PHP-FPM с Nginx
+
+Мы должны создать файл конфигурации виртуального хоста нашего доменного имени. Зайдите в каталог конфигурации Nginx и создайте файл.
+cd /etc/nginx/conf.d/ 
+nano yourdomain.com.conf
+
+Вставьте следующие строчки кода.
+server {
+         listen       80;
+         server_name  yourdomain.com;
+         root         /var/www/html/;
+
+         access_log /var/log/nginx/yourdomain.com-access.log;
+         error_log  /var/log/nginx/yourdomain.com-error.log error;
+         index index.html index.htm index.php;
+
+         location / {
+                      try_files $uri $uri/ /index.php$is_args$args;
+         }
+
+         location ~ .php$ {
+            fastcgi_split_path_info ^(..php)(/.)$;
+            fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+            fastcgi_index index.php;
+            include fastcgi.conf;
+        }
+}
+
+Проверьте синтаксис конфигурации Nginx, чтобы убедиться, что он в порядке.
+nginx -t
+
+Перезапустите службу Nginx.
+sudo systemctl restart nginx
 
