@@ -400,6 +400,8 @@ systemctl restart nginx
 
                                 PHP для Nginx
 
+https://itshaman.ru/articles/783/nastroika-php-fpm-v-nginx-na-ubuntu-2204
+
 Установка расширения php-fpm вместе с другими расширениями php.
 sudo apt install software-properties-common ca-certificates lsb-release apt-transport-https -y
 LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
